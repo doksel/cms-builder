@@ -1,19 +1,32 @@
 'use client';
-import { useState } from 'react';
+
+import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient, useSession } from '@supabase/auth-helpers-react';
+
+import { URL_ADMIN } from '@/constants/path';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
   const supabase = useSupabaseClient();
+  const session = useSession();
+
+  useEffect(() => {
+    if (session) {
+      router.push(URL_ADMIN);
+    }
+  }, [session, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    const email = emailRef.current?.value || '';
+    const password = passwordRef.current?.value || '';
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -22,7 +35,7 @@ export default function LoginPage() {
     if (error) {
       setError(error.message);
     } else {
-      router.push('/admin');
+      router.push(URL_ADMIN);
     }
   };
 
@@ -37,16 +50,14 @@ export default function LoginPage() {
         <input
           type="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          ref={emailRef}
           className="w-full p-2 mb-3 border border-gray-300 rounded"
           required
         />
         <input
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          ref={passwordRef}
           className="w-full p-2 mb-4 border border-gray-300 rounded"
           required
         />
