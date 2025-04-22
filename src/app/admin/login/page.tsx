@@ -1,13 +1,17 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { toast } from 'sonner';
 
 import FormInput from '@/components/ui/FormInput';
+import Button from '@/components/ui/Button';
+
 import { loginSchema } from '@/utils/validation';
+import { URL_ADMIN } from '@/constants/path';
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -18,7 +22,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
@@ -30,9 +34,14 @@ export default function LoginPage() {
     });
 
     if (error) {
-      alert(error.message);
+      toast.error('Error!', {
+        description: error.message,
+      });
     } else {
-      router.push('/admin');
+      toast.success('Success!', {
+        description: 'Wow',
+      });
+      router.push(URL_ADMIN);
     }
   };
 
@@ -58,12 +67,9 @@ export default function LoginPage() {
           error={errors.password?.message}
         />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
+        <Button type="submit" className="w-full mt-4" loading={isSubmitting}>
           Войти
-        </button>
+        </Button>
       </form>
     </div>
   );

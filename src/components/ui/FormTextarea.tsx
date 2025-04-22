@@ -1,25 +1,22 @@
-import Input from '@/components/ui/common/Input';
 import Label from '@/components/ui/common/Label';
+import Textarea from '@/components/ui/common/Textarea';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-interface FormInputProps {
+interface FormTextareaProps {
   label: string;
-  type?: string;
   registration: UseFormRegisterReturn;
   error?: string;
 }
 
-export default function FormInput({
+export default function FormTextarea({
   label,
-  type = 'text',
   registration,
   error,
-}: FormInputProps) {
+}: FormTextareaProps) {
   return (
     <div className="mb-4">
       <Label className="block mb-1">{label}</Label>
-      <Input
-        type={type}
+      <Textarea
         {...registration}
         className={error ? 'border-red-500 focus-visible:ring-red-500' : ''}
       />

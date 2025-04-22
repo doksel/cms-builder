@@ -1,28 +1,34 @@
-import Input from '@/components/ui/common/Input';
 import Label from '@/components/ui/common/Label';
+import Select from '@/components/ui/common/Select';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-interface FormInputProps {
+interface FormSelectProps {
   label: string;
-  type?: string;
+  options: { label: string; value: string }[];
   registration: UseFormRegisterReturn;
   error?: string;
 }
 
-export default function FormInput({
+export default function FormSelect({
   label,
-  type = 'text',
+  options,
   registration,
   error,
-}: FormInputProps) {
+}: FormSelectProps) {
   return (
     <div className="mb-4">
       <Label className="block mb-1">{label}</Label>
-      <Input
-        type={type}
+      <Select
         {...registration}
         className={error ? 'border-red-500 focus-visible:ring-red-500' : ''}
-      />
+      >
+        <option value="">Выбери значение</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </Select>
       {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
     </div>
   );
