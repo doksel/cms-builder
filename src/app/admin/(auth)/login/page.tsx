@@ -29,27 +29,32 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
+    // const { error } = await supabase.auth.signInWithPassword({
+    //   email: data.email,
+    //   password: data.password,
+    // });
 
-    if (error) {
-      toast.error('Error!', {
-        description: error.message,
+    // if (error) {
+    //   toast.error('Error!', {
+    //     description: error.message,
+    //   });
+    // } else {
+    //   toast.success('Success!', {
+    //     description: 'Wow',
+    //   });
+    //   router.push(URL_ADMIN);
+    // }
+
+    if (data.email === 'qwe@qwe.qwe' && data.password === 'qweqwe') {
+      toast.success('Success!', {
+        description: 'Wow',
       });
-    } else {
-      if (data.email === 'qwe@qwe.qwe' && data.password === 'qweqwe') {
-        toast.success('Success!', {
-          description: 'Wow',
-        });
-      }
       router.push(URL_ADMIN);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center h-full w-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-6 rounded shadow-md w-full max-w-md"

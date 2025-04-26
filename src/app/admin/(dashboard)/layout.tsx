@@ -12,15 +12,16 @@ export default function AdminLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen">
+      <Toaster richColors position="top-right" />
+
       <AdminHeader />
-      <div className="flex flex-1">
+
+      <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <aside className="w-64 border-r">[Sidebar]</aside>
+
+        <main className="flex-1 overflow-y-auto p-4 bg-muted">{children}</main>
 
         <SettingsPanel />
-        <main className="flex-1 p-4 bg-muted overflow-auto">{children}</main>
-
-        <Toaster richColors position="top-right" />
       </div>
     </div>
   );
