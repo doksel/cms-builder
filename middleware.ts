@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
-import { URL_ADMIN, URL_LOGIN } from '@/constants/path';
+import { URL_ADMIN, URL_LOGIN, URL_REGISTER } from '@/constants/path';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
@@ -12,9 +12,12 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = req.nextUrl.pathname;
+
   const isProtectedAdminPath =
-    req.nextUrl.pathname.startsWith(URL_ADMIN) &&
-    !req.nextUrl.pathname.startsWith(URL_LOGIN);
+    pathname.startsWith(URL_ADMIN) &&
+    pathname !== URL_LOGIN &&
+    pathname !== URL_REGISTER;
 
   if (isProtectedAdminPath && !user) {
     return NextResponse.redirect(new URL(URL_LOGIN, req.url));

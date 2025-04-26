@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
@@ -11,7 +11,8 @@ import FormInput from '@/components/ui/FormInput';
 import Button from '@/components/ui/Button';
 
 import { loginSchema } from '@/utils/validation';
-import { URL_ADMIN } from '@/constants/path';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { URL_ADMIN, URL_REGISTER } from '@/constants/path';
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -38,9 +39,11 @@ export default function LoginPage() {
         description: error.message,
       });
     } else {
-      toast.success('Success!', {
-        description: 'Wow',
-      });
+      if (data.email === 'qwe@qwe.qwe' && data.password === 'qweqwe') {
+        toast.success('Success!', {
+          description: 'Wow',
+        });
+      }
       router.push(URL_ADMIN);
     }
   };
@@ -67,9 +70,20 @@ export default function LoginPage() {
           error={errors.password?.message}
         />
 
-        <Button type="submit" className="w-full mt-4" loading={isSubmitting}>
+        <Button
+          type="submit"
+          className="w-full mt-4 cursor-pointer"
+          loading={isSubmitting}
+        >
           Войти
         </Button>
+
+        <div className="text-sm text-center mt-4">
+          Нет аккаунта?{' '}
+          <Link href={URL_REGISTER} className="text-indigo-900 underline">
+            Зарегистрироваться
+          </Link>
+        </div>
       </form>
     </div>
   );
