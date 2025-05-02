@@ -29,21 +29,21 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    // const { error } = await supabase.auth.signInWithPassword({
-    //   email: data.email,
-    //   password: data.password,
-    // });
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
 
-    // if (error) {
-    //   toast.error('Error!', {
-    //     description: error.message,
-    //   });
-    // } else {
-    //   toast.success('Success!', {
-    //     description: 'Wow',
-    //   });
-    //   router.push(URL_ADMIN);
-    // }
+    if (error) {
+      toast.error('Error!', {
+        description: error.message,
+      });
+    } else {
+      toast.success('Success!', {
+        description: 'Wow',
+      });
+      router.push(URL_ADMIN);
+    }
 
     if (data.email === 'qwe@qwe.qwe' && data.password === 'qweqwe') {
       toast.success('Success!', {
