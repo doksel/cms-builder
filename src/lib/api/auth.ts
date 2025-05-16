@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export const login = async (email: string, password: string) => {
   try {
     const res = await fetch('/api/auth/login', {

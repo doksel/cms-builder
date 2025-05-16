@@ -1,5 +1,4 @@
 'use client';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect, useState, useTransition } from 'react';
 import { Trash2 } from 'lucide-react';
