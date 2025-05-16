@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { LogOut, Settings, Languages } from 'lucide-react';
-import { URL_SETTINGS } from '@/constants/path';
+import { URL_SETTINGS, URL_LOGIN } from '@/constants/path';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/admin/login');
+    router.push(URL_LOGIN);
   };
 
   return (

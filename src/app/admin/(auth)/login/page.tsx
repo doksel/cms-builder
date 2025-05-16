@@ -1,5 +1,4 @@
 'use client';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -7,18 +6,20 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 import FormInput from '@/components/ui/FormInput';
 import Button from '@/components/ui/Button';
 
 import { loginSchema } from '@/utils/validation';
 import { URL_REGISTER, URL_ADMIN } from '@/constants/path';
-import { login } from '@/lib/api/auth';
+// import { login } from '@/lib/api/auth';
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
+  const supabase = useSupabaseClient();
 
   const {
     register,
@@ -27,10 +28,29 @@ export default function LoginPage() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
+
+  // const onSubmit = async (data: LoginFormData) => {
+  //   try {
+  //     const result = await login(data.email, data.password);
+  //     toast.success(result.message);
+  //     router.push(URL_ADMIN);
+  //   } catch (error: any) {
+  //     toast.error(error.message || 'Ошибка при входе');
+  //   }
+  // };
+
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const result = await login(data.email, data.password);
-      toast.success(result.message);
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      toast.success('Успешный вход!');
       router.push(URL_ADMIN);
     } catch (error: any) {
       toast.error(error.message || 'Ошибка при входе');
